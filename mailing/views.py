@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
 
 from .services.spreadsheet import extract_addresses
@@ -8,6 +9,7 @@ MAX_FILE_SIZE = 20 * 1024 * 1024
 ALLOWED_EXTENSIONS = (".xlsx", ".xls", ".csv")
 
 
+@ensure_csrf_cookie
 def home(request):
     return render(request, "index.html")
 

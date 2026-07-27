@@ -105,8 +105,23 @@ CSRF_TRUSTED_ORIGINS = [
     if origin.strip()
 ]
 
+RENDER_ORIGINS = (
+    "https://enriquecimento-nio.onrender.com",
+    "https://mailing-enderecos.onrender.com",
+)
+
+render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if render_host:
-    CSRF_TRUSTED_ORIGINS.append(f"https://{render_host}")
+    RENDER_ORIGINS = (*RENDER_ORIGINS, f"https://{render_host}")
+
+for origin in RENDER_ORIGINS:
+    if origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(origin)
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024

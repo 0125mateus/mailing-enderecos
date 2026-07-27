@@ -28,6 +28,14 @@ function getCookie(name) {
     return "";
 }
 
+function getCsrfToken() {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    if (meta && meta.content) {
+        return meta.content;
+    }
+    return getCookie("csrftoken");
+}
+
 function showStatus(message, type = "info") {
     statusBox.textContent = message;
     statusBox.className = `status ${type}`;
@@ -108,10 +116,16 @@ btnProcessar.addEventListener("click", async () => {
         const response = await fetch("/api/upload/", {
             method: "POST",
             headers: {
-                "X-CSRFToken": getCookie("csrftoken"),
+                "X-CSRFToken": getCsrfToken(),
             },
+            credentials: "same-origin",
             body: formData,
         });
+
+        const contentType = response.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+            throw new Error("Erro de autenticação. Atualize a página e tente novamente.");
+        }
 
         const data = await response.json();
 
