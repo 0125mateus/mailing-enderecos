@@ -20,7 +20,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body>
+<body
+    data-maps-automation="{{ maps_automation_enabled|yesno:'true,false' }}"
+    data-google-maps-url="{{ google_maps_url }}"
+>
     <div class="geo-bg" aria-hidden="true">
         <div class="geo-grid"></div>
         <div class="geo-shape geo-glow geo-glow-cyan"></div>
@@ -106,20 +109,6 @@
                 </article>
             </div>
 
-            {% if maps_automation_enabled %}
-            <div class="maps-actions">
-                <button type="button" id="btn-maps" class="btn-maps">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                        <path d="M8 1.5l5.5 3.2v7.1L8 15.5 2.5 11.8V4.7L8 1.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                        <circle cx="8" cy="7" r="2" stroke="currentColor" stroke-width="1.5"/>
-                    </svg>
-                    <span>Pesquisar no Google My Maps</span>
-                </button>
-                <button type="button" id="btn-maps-cancelar" class="btn-maps-cancel hidden" disabled>
-                    Cancelar automação
-                </button>
-            </div>
-
             <section id="maps-progress" class="maps-progress hidden" aria-live="polite">
                 <div class="maps-progress-head">
                     <span id="maps-progress-label">Preparando automação...</span>
@@ -130,7 +119,6 @@
                 </div>
                 <p id="maps-progress-address" class="maps-progress-address mono"></p>
             </section>
-            {% endif %}
 
             <div class="toolbar">
                 <div class="search-wrap">
@@ -161,21 +149,16 @@
                 <span id="pagina-atual" class="mono">Página 1</span>
                 <div class="pagination-actions">
                     <button type="button" id="btn-proximo" disabled>Próxima</button>
-                    <a
-                        href="{{ google_maps_url }}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="btn-maps-open"
-                    >
+                    <button type="button" id="btn-abrir-maps" class="btn-maps-open">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                             <path d="M8 1.5l5.5 3.2v7.1L8 15.5 2.5 11.8V4.7L8 1.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
                             <circle cx="8" cy="7" r="2" stroke="currentColor" stroke-width="1.5"/>
                         </svg>
                         <span>Abrir Google My Maps</span>
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                            <path d="M5 2h7v7M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </a>
+                    </button>
+                    <button type="button" id="btn-maps-cancelar" class="btn-maps-cancel hidden" disabled>
+                        Cancelar
+                    </button>
                 </div>
             </div>
         </section>

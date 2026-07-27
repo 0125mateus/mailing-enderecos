@@ -14,7 +14,7 @@ const statArquivo = document.getElementById("stat-arquivo");
 const statLinhas = document.getElementById("stat-linhas");
 const statEnderecos = document.getElementById("stat-enderecos");
 const btnTema = document.getElementById("btn-tema");
-const btnMaps = document.getElementById("btn-maps");
+const btnAbrirMaps = document.getElementById("btn-abrir-maps");
 const btnMapsCancelar = document.getElementById("btn-maps-cancelar");
 const mapsProgress = document.getElementById("maps-progress");
 const mapsProgressLabel = document.getElementById("maps-progress-label");
@@ -26,6 +26,8 @@ const mapsProgressBar = mapsProgress?.querySelector(".maps-progress-bar");
 const PAGE_SIZE = 50;
 const THEME_KEY = "theme";
 const MAPS_POLL_INTERVAL_MS = 1500;
+const mapsAutomationEnabled = document.body.dataset.mapsAutomation === "true";
+const googleMapsUrl = document.body.dataset.googleMapsUrl || "";
 
 let enderecosFiltrados = [];
 let pagina = 1;
@@ -90,8 +92,8 @@ function resetMapsAutomationUi() {
         mapsPollTimer = null;
     }
     mapsJobId = null;
-    if (btnMaps) {
-        btnMaps.disabled = false;
+    if (btnAbrirMaps) {
+        btnAbrirMaps.disabled = false;
     }
     if (btnMapsCancelar) {
         btnMapsCancelar.classList.add("hidden");
@@ -169,6 +171,21 @@ async function pollMapsJobStatus() {
     }
 }
 
+async function handleAbrirMaps() {
+    if (mapsAutomationEnabled) {
+        await iniciarMapsAutomation();
+        return;
+    }
+
+    if (googleMapsUrl) {
+        window.open(googleMapsUrl, "_blank", "noopener,noreferrer");
+    }
+    showStatus(
+        "Automação com Playwright funciona no ambiente local. No Render, o mapa abre em nova aba.",
+        "info"
+    );
+}
+
 async function iniciarMapsAutomation() {
     if (!window.enderecosAtuais || window.enderecosAtuais.length === 0) {
         showStatus("Processe uma planilha antes de pesquisar no mapa.", "error");
@@ -176,9 +193,13 @@ async function iniciarMapsAutomation() {
     }
 
     resetMapsAutomationUi();
-    btnMaps.disabled = true;
-    btnMapsCancelar.classList.remove("hidden");
-    btnMapsCancelar.disabled = false;
+    if (btnAbrirMaps) {
+        btnAbrirMaps.disabled = true;
+    }
+    if (btnMapsCancelar) {
+        btnMapsCancelar.classList.remove("hidden");
+        btnMapsCancelar.disabled = false;
+    }
     mapsProgress.classList.remove("hidden");
     updateMapsProgress({
         status: "pending",
@@ -365,8 +386,8 @@ btnProximo.addEventListener("click", () => {
     }
 });
 
-if (btnMaps) {
-    btnMaps.addEventListener("click", iniciarMapsAutomation);
+if (btnAbrirMaps) {
+    btnAbrirMaps.addEventListener("click", handleAbrirMaps);
 }
 
 if (btnMapsCancelar) {

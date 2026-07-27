@@ -468,8 +468,19 @@ body {
     font-size: 0.8125rem;
 }
 
-.btn-maps-open:hover {
+button.btn-maps-open {
+    font-family: inherit;
+    font-weight: 600;
+}
+
+.btn-maps-open:not(:disabled):hover {
     opacity: 0.92;
+}
+
+.btn-maps-open:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 .btn-maps {
