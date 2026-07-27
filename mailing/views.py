@@ -19,7 +19,10 @@ def home(request):
     return render(
         request,
         "index.html",
-        {"maps_automation_enabled": settings.PLAYWRIGHT_ENABLED},
+        {
+            "maps_automation_enabled": settings.PLAYWRIGHT_ENABLED,
+            "google_maps_url": settings.GOOGLE_MAPS_URL,
+        },
     )
 
 

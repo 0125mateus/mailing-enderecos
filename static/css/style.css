@@ -435,7 +435,13 @@ body {
     margin-bottom: 20px;
 }
 
+.maps-actions-header {
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+
 .btn-maps,
+.btn-maps-open,
 .btn-maps-cancel {
     display: inline-flex;
     align-items: center;
@@ -448,6 +454,18 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s, background 0.2s;
+    text-decoration: none;
+}
+
+.btn-maps-open {
+    border: 1px solid rgba(8, 145, 178, 0.35);
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.12) 0%, rgba(99, 102, 241, 0.1) 100%);
+    color: var(--cyan);
+    box-shadow: 0 4px 14px var(--cyan-glow);
+}
+
+.btn-maps-open:hover {
+    opacity: 0.92;
 }
 
 .btn-maps {
