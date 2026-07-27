@@ -342,7 +342,20 @@ body {
 
 /* ── Upload ── */
 
+.file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 .upload-area {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -360,6 +373,12 @@ body {
     border-color: var(--cyan);
     background: var(--cyan-dim);
     box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.06);
+}
+
+.upload-area-drag {
+    border-color: var(--violet);
+    background: var(--violet-dim);
+    box-shadow: 0 0 0 3px var(--violet-glow);
 }
 
 .upload-icon {

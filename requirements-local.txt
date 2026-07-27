@@ -1,0 +1,4 @@
+# Dependências extras para automação local com Playwright.
+# Instale com: pip install -r requirements-local.txt
+# Depois: python -m playwright install --with-deps chromium
+playwright>=1.49.0

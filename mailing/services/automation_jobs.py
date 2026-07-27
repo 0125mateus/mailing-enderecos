@@ -3,8 +3,6 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Any
 
-from .maps_automation import search_addresses_on_map
-
 _jobs: dict[str, "AutomationJob"] = {}
 _lock = threading.Lock()
 
@@ -34,6 +32,8 @@ class AutomationJob:
 
 
 def _run_job(job: AutomationJob, addresses: list[str]) -> None:
+    from .maps_automation import search_addresses_on_map
+
     job.status = "running"
 
     def on_progress(current: int, total: int, address: str) -> None:

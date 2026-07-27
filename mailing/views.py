@@ -5,7 +5,6 @@ from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
 
-from .services.automation_jobs import cancel_job, create_job, get_job
 from .services.spreadsheet import extract_addresses
 
 MAX_FILE_SIZE = 20 * 1024 * 1024
@@ -78,9 +77,16 @@ def iniciar_maps_automation(request):
 
     if not settings.PLAYWRIGHT_ENABLED:
         return JsonResponse(
-            {"erro": "Automação do Google My Maps está desabilitada."},
+            {
+                "erro": (
+                    "Automação Playwright disponível apenas no ambiente local. "
+                    "No Render, o botão abre o mapa em nova aba."
+                ),
+            },
             status=503,
         )
+
+    from .services.automation_jobs import create_job
 
     try:
         payload = _parse_json_body(request)
@@ -115,6 +121,8 @@ def iniciar_maps_automation(request):
 
 @require_http_methods(["GET"])
 def status_maps_automation(request, job_id):
+    from .services.automation_jobs import get_job
+
     job = get_job(job_id)
     if not job:
         return JsonResponse({"erro": "Automação não encontrada."}, status=404)
@@ -123,6 +131,8 @@ def status_maps_automation(request, job_id):
 
 @require_http_methods(["POST"])
 def cancelar_maps_automation(request, job_id):
+    from .services.automation_jobs import cancel_job
+
     job = cancel_job(job_id)
     if not job:
         return JsonResponse({"erro": "Automação não encontrada."}, status=404)
