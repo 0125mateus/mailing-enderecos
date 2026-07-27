@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mailing Endereços</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <main class="container">
+        <header class="header">
+            <h1>Mailing Endereços</h1>
+            <p>Abra uma planilha do seu computador para listar os endereços encontrados.</p>
+        </header>
+
+        <section class="upload-card">
+            <label class="upload-area" for="arquivo">
+                <input type="file" id="arquivo" accept=".xlsx,.xls,.csv" hidden>
+                <div class="upload-icon">📄</div>
+                <strong>Clique para escolher uma planilha</strong>
+                <span>Formatos aceitos: .xlsx, .xls, .csv</span>
+                <span class="file-name" id="file-name">Nenhum arquivo selecionado</span>
+            </label>
+
+            <button type="button" id="btn-processar" disabled>Processar planilha</button>
+        </section>
+
+        <section id="status" class="status hidden"></section>
+
+        <section id="resultado" class="resultado hidden">
+            <div class="stats">
+                <article class="stat-card">
+                    <span class="stat-label">Arquivo</span>
+                    <strong id="stat-arquivo">-</strong>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-label">Linhas na planilha</span>
+                    <strong id="stat-linhas">0</strong>
+                </article>
+                <article class="stat-card highlight">
+                    <span class="stat-label">Endereços encontrados</span>
+                    <strong id="stat-enderecos">0</strong>
+                </article>
+            </div>
+
+            <div class="toolbar">
+                <input type="search" id="busca" placeholder="Buscar endereço...">
+                <span id="contador-lista"></span>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Linha</th>
+                            <th>Endereço</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-enderecos"></tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button type="button" id="btn-anterior" disabled>Anterior</button>
+                <span id="pagina-atual">Página 1</span>
+                <button type="button" id="btn-proximo" disabled>Próxima</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>
