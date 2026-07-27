@@ -231,44 +231,10 @@ body {
 }
 
 .header-desc {
-    margin: 0 0 16px;
+    margin: 0;
     max-width: 520px;
     font-size: 0.9375rem;
     color: var(--text-secondary);
-}
-
-.header-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.tag {
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    border: 1px solid transparent;
-}
-
-.tag-cyan {
-    color: var(--cyan);
-    background: var(--cyan-dim);
-    border-color: rgba(8, 145, 178, 0.2);
-}
-
-.tag-violet {
-    color: var(--violet);
-    background: var(--violet-dim);
-    border-color: rgba(124, 58, 237, 0.2);
-}
-
-.tag-emerald {
-    color: var(--emerald);
-    background: var(--emerald-dim);
-    border-color: rgba(5, 150, 105, 0.2);
 }
 
 /* ── Cards ── */
@@ -312,13 +278,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
-    margin-bottom: 8px;
-    border-radius: 12px;
-    background: var(--cyan-dim);
-    border: 1px solid rgba(8, 145, 178, 0.15);
-    color: var(--cyan);
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+    opacity: 0.85;
 }
 
 .upload-area strong {
