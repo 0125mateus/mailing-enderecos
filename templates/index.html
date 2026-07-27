@@ -17,29 +17,28 @@
         <div class="geo-shape geo-glow geo-glow-cyan"></div>
         <div class="geo-shape geo-glow geo-glow-violet"></div>
         <div class="geo-shape geo-ring"></div>
-        <div class="geo-shape geo-bars"></div>
-        <div class="geo-shape geo-scatter"></div>
+        <div class="geo-shape geo-ruled"></div>
     </div>
 
     <main class="container">
         <header class="header">
             <div class="brand">
                 <div class="brand-mark">
-                    <span class="mark-bar mark-bar-1"></span>
-                    <span class="mark-bar mark-bar-2"></span>
-                    <span class="mark-bar mark-bar-3"></span>
-                    <span class="mark-dot"></span>
+                    <span class="mark-line"></span>
+                    <span class="mark-line"></span>
+                    <span class="mark-line"></span>
+                    <span class="mark-line mark-line-short"></span>
                 </div>
                 <div>
-                    <p class="brand-label">Pipeline de dados</p>
+                    <p class="brand-label">Linhas de escritório</p>
                     <h1>Enriquecimento <span class="accent-nio">NIO</span></h1>
                 </div>
             </div>
-            <p class="header-desc">Importe uma planilha e extraia endereços com processamento automatizado em Python.</p>
+            <p class="header-desc">Importe uma planilha de mailing e visualize os endereços de forma rápida e organizada.</p>
             <div class="header-tags">
-                <span class="tag tag-cyan">pandas</span>
+                <span class="tag tag-cyan">planilhas</span>
                 <span class="tag tag-violet">xlsx / csv</span>
-                <span class="tag tag-emerald">geolocalização</span>
+                <span class="tag tag-emerald">mailing</span>
             </div>
         </header>
 
@@ -59,7 +58,7 @@
             </label>
 
             <button type="button" id="btn-processar" disabled>
-                <span>Executar pipeline</span>
+                <span>Processar planilha</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -70,7 +69,7 @@
 
         <section id="resultado" class="resultado hidden">
             <div class="section-head">
-                <h2>Output</h2>
+                <h2>Resultado</h2>
                 <div class="section-line"></div>
             </div>
 

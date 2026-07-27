@@ -113,51 +113,32 @@ body {
     border: 1px solid rgba(8, 145, 178, 0.25);
 }
 
-.geo-bars {
+.geo-ruled {
     bottom: 18%;
-    right: 12%;
-    display: flex;
-    align-items: flex-end;
-    gap: 6px;
-    height: 48px;
-    opacity: 0.45;
+    right: 10%;
+    width: 120px;
+    height: 72px;
+    border: 1px solid rgba(203, 213, 225, 0.6);
+    border-radius: 4px;
+    background:
+        repeating-linear-gradient(
+            180deg,
+            transparent,
+            transparent 14px,
+            rgba(203, 213, 225, 0.5) 14px,
+            rgba(203, 213, 225, 0.5) 15px
+        );
+    opacity: 0.5;
 }
 
-.geo-bars::before,
-.geo-bars::after {
-    content: "";
-    display: block;
-    border-radius: 3px 3px 0 0;
-}
-
-.geo-bars::before {
-    width: 10px;
-    height: 28px;
-    background: var(--cyan);
-    box-shadow: 16px 0 0 var(--violet), 32px 0 0 var(--emerald);
-}
-
-.geo-scatter {
-    top: 40%;
-    left: 8%;
-    width: 80px;
-    height: 60px;
-    opacity: 0.4;
-}
-
-.geo-scatter::before {
+.geo-ruled::before {
     content: "";
     position: absolute;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--cyan);
-    box-shadow:
-        20px 10px 0 var(--violet),
-        40px -5px 0 var(--emerald),
-        55px 25px 0 var(--coral),
-        10px 35px 0 var(--amber),
-        65px 40px 0 var(--indigo);
+    top: 0;
+    bottom: 0;
+    left: 18px;
+    width: 1px;
+    background: rgba(225, 29, 72, 0.2);
 }
 
 /* ── Layout ── */
@@ -186,46 +167,42 @@ body {
 .brand-mark {
     position: relative;
     display: flex;
-    align-items: flex-end;
-    gap: 4px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
     width: 48px;
     height: 40px;
-    padding: 4px;
+    padding: 8px 6px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     box-shadow: var(--shadow);
 }
 
-.mark-bar {
-    flex: 1;
-    border-radius: 2px 2px 0 0;
+.mark-line {
+    display: block;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--border-light);
 }
 
-.mark-bar-1 {
-    height: 40%;
+.mark-line:nth-child(1) {
     background: var(--cyan);
+    opacity: 0.7;
 }
 
-.mark-bar-2 {
-    height: 70%;
+.mark-line:nth-child(2) {
     background: var(--violet);
+    opacity: 0.5;
 }
 
-.mark-bar-3 {
-    height: 55%;
+.mark-line:nth-child(3) {
     background: var(--emerald);
+    opacity: 0.5;
 }
 
-.mark-dot {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--coral);
-    box-shadow: 0 0 6px rgba(225, 29, 72, 0.4);
+.mark-line-short {
+    width: 65%;
 }
 
 .brand-label {
@@ -707,8 +684,7 @@ tbody tr:hover td:nth-child(2) {
         align-items: stretch;
     }
 
-    .geo-bars,
-    .geo-scatter,
+    .geo-ruled,
     .geo-ring {
         display: none;
     }
