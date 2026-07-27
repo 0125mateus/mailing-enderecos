@@ -14,7 +14,13 @@ ALLOWED_EXTENSIONS = (".xlsx", ".xls", ".csv")
 
 @ensure_csrf_cookie
 def home(request):
-    return render(request, "index.html")
+    from django.conf import settings
+
+    return render(
+        request,
+        "index.html",
+        {"maps_automation_enabled": settings.PLAYWRIGHT_ENABLED},
+    )
 
 
 @require_http_methods(["POST"])
@@ -65,6 +71,16 @@ def _parse_json_body(request) -> dict:
 
 @require_http_methods(["POST"])
 def iniciar_maps_automation(request):
+    from django.conf import settings
+
+    if not settings.PLAYWRIGHT_ENABLED:
+        return JsonResponse(
+            {
+                "erro": "Automação do Google My Maps disponível apenas no ambiente local.",
+            },
+            status=503,
+        )
+
     try:
         payload = _parse_json_body(request)
     except ValueError as exc:

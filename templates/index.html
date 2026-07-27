@@ -106,6 +106,7 @@
                 </article>
             </div>
 
+            {% if maps_automation_enabled %}
             <div class="maps-actions">
                 <button type="button" id="btn-maps" class="btn-maps">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -129,6 +130,7 @@
                 </div>
                 <p id="maps-progress-address" class="maps-progress-address mono"></p>
             </section>
+            {% endif %}
 
             <div class="toolbar">
                 <div class="search-wrap">

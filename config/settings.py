@@ -140,6 +140,10 @@ PLAYWRIGHT_USER_DATA_DIR = os.environ.get(
     "PLAYWRIGHT_USER_DATA_DIR",
     str(BASE_DIR / "playwright" / "chrome-profile"),
 )
+PLAYWRIGHT_ENABLED = os.environ.get(
+    "PLAYWRIGHT_ENABLED",
+    "False" if render_host else "True",
+).lower() == "true"
 _default_storage_state = BASE_DIR / "playwright" / "google-auth.json"
 PLAYWRIGHT_STORAGE_STATE = os.environ.get(
     "PLAYWRIGHT_STORAGE_STATE",

@@ -18,6 +18,8 @@ services:
           property: connectionString
       - key: PLAYWRIGHT_HEADLESS
         value: "True"
+      - key: PLAYWRIGHT_ENABLED
+        value: "False"
       - key: GOOGLE_MAPS_URL
         value: "https://www.google.com/maps/d/viewer?mid=1NfQvsWBh_AmyvVABRRd7_lJ4W4mg8q4&ll=-23.281103667749008%2C-51.28276285&z=17"
 
