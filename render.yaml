@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: mailing-enderecos
+    name: enriquecimento-nio
     env: python
     plan: free
     buildCommand: bash build.sh
