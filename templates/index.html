@@ -5,47 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enriquecimento NIO</title>
     {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+    <div class="geo-bg" aria-hidden="true">
+        <div class="geo-shape geo-circle"></div>
+        <div class="geo-shape geo-ring"></div>
+        <div class="geo-shape geo-square"></div>
+        <div class="geo-shape geo-line"></div>
+        <div class="geo-shape geo-dots"></div>
+    </div>
+
     <main class="container">
         <header class="header">
-            <h1>Enriquecimento NIO</h1>
-            <p>Abra uma planilha do seu computador para listar os endereços encontrados.</p>
+            <div class="brand">
+                <div class="brand-mark">
+                    <span class="mark-square"></span>
+                    <span class="mark-circle"></span>
+                </div>
+                <div>
+                    <p class="brand-label">Sistema de dados</p>
+                    <h1>Enriquecimento NIO</h1>
+                </div>
+            </div>
+            <p class="header-desc">Importe uma planilha e visualize os endereços identificados automaticamente.</p>
         </header>
 
         <section class="upload-card">
             <label class="upload-area" for="arquivo">
                 <input type="file" id="arquivo" accept=".xlsx,.xls,.csv" hidden>
-                <div class="upload-icon">📄</div>
-                <strong>Clique para escolher uma planilha</strong>
-                <span>Formatos aceitos: .xlsx, .xls, .csv</span>
+                <div class="upload-icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                        <rect x="4" y="6" width="24" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M10 14h12M10 18h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M16 22V10M13 13l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <strong>Selecionar planilha</strong>
+                <span class="upload-hint">Arraste ou clique para escolher · .xlsx, .xls, .csv</span>
                 <span class="file-name" id="file-name">Nenhum arquivo selecionado</span>
             </label>
 
-            <button type="button" id="btn-processar" disabled>Processar planilha</button>
+            <button type="button" id="btn-processar" disabled>
+                <span>Processar planilha</span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         </section>
 
         <section id="status" class="status hidden"></section>
 
         <section id="resultado" class="resultado hidden">
+            <div class="section-head">
+                <h2>Resultado</h2>
+                <div class="section-line"></div>
+            </div>
+
             <div class="stats">
                 <article class="stat-card">
+                    <div class="stat-icon stat-icon-file"></div>
                     <span class="stat-label">Arquivo</span>
                     <strong id="stat-arquivo">-</strong>
                 </article>
                 <article class="stat-card">
+                    <div class="stat-icon stat-icon-rows"></div>
                     <span class="stat-label">Linhas na planilha</span>
                     <strong id="stat-linhas">0</strong>
                 </article>
                 <article class="stat-card highlight">
+                    <div class="stat-icon stat-icon-pin"></div>
                     <span class="stat-label">Endereços encontrados</span>
                     <strong id="stat-enderecos">0</strong>
                 </article>
             </div>
 
             <div class="toolbar">
-                <input type="search" id="busca" placeholder="Buscar endereço...">
+                <div class="search-wrap">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <input type="search" id="busca" placeholder="Buscar endereço...">
+                </div>
                 <span id="contador-lista"></span>
             </div>
 
