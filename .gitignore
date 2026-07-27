@@ -4,6 +4,7 @@ __pycache__/
 db.sqlite3
 staticfiles/
 .env
+playwright/
 *.xlsx
 *.xls
 *.csv

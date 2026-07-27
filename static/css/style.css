@@ -426,6 +426,102 @@ body {
     box-shadow: none;
 }
 
+/* ── Google Maps automation ── */
+
+.maps-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.btn-maps,
+.btn-maps-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s, background 0.2s;
+}
+
+.btn-maps {
+    border: 1px solid rgba(5, 150, 105, 0.35);
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.12) 0%, rgba(8, 145, 178, 0.12) 100%);
+    color: var(--emerald);
+    box-shadow: 0 4px 14px var(--emerald-glow);
+}
+
+.btn-maps:not(:disabled):hover {
+    opacity: 0.92;
+}
+
+.btn-maps:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-maps-cancel {
+    border: 1px solid var(--error-border);
+    background: var(--error-bg);
+    color: var(--error);
+}
+
+.btn-maps-cancel:not(:disabled):hover {
+    opacity: 0.9;
+}
+
+.btn-maps-cancel:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.maps-progress {
+    margin-bottom: 20px;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-elevated);
+}
+
+.maps-progress-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.maps-progress-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--border);
+    overflow: hidden;
+}
+
+.maps-progress-fill {
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    transition: width 0.35s ease;
+}
+
+.maps-progress-address {
+    margin: 10px 0 0;
+    font-size: 0.75rem;
+    color: var(--muted);
+    word-break: break-word;
+}
+
 /* ── Status ── */
 
 .status {

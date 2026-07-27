@@ -125,3 +125,23 @@ if not DEBUG:
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
+
+GOOGLE_MAPS_URL = os.environ.get(
+    "GOOGLE_MAPS_URL",
+    "https://www.google.com/maps/d/viewer?mid=1NfQvsWBh_AmyvVABRRd7_lJ4W4mg8q4&ll=-23.281103667749008%2C-51.28276285&z=17",
+)
+PLAYWRIGHT_HEADLESS = os.environ.get("PLAYWRIGHT_HEADLESS", "True").lower() == "true"
+PLAYWRIGHT_SEARCH_DELAY_MS = int(os.environ.get("PLAYWRIGHT_SEARCH_DELAY_MS", "2500"))
+_default_browser_channel = "" if render_host else "chrome"
+PLAYWRIGHT_BROWSER_CHANNEL = os.environ.get(
+    "PLAYWRIGHT_BROWSER_CHANNEL", _default_browser_channel
+)
+PLAYWRIGHT_USER_DATA_DIR = os.environ.get(
+    "PLAYWRIGHT_USER_DATA_DIR",
+    str(BASE_DIR / "playwright" / "chrome-profile"),
+)
+_default_storage_state = BASE_DIR / "playwright" / "google-auth.json"
+PLAYWRIGHT_STORAGE_STATE = os.environ.get(
+    "PLAYWRIGHT_STORAGE_STATE",
+    str(_default_storage_state) if _default_storage_state.is_file() else "",
+)
