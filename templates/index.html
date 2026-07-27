@@ -8,31 +8,39 @@
     {% load static %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <div class="geo-bg" aria-hidden="true">
-        <div class="geo-shape geo-circle"></div>
+        <div class="geo-grid"></div>
+        <div class="geo-shape geo-glow geo-glow-cyan"></div>
+        <div class="geo-shape geo-glow geo-glow-violet"></div>
         <div class="geo-shape geo-ring"></div>
-        <div class="geo-shape geo-square"></div>
-        <div class="geo-shape geo-line"></div>
-        <div class="geo-shape geo-dots"></div>
+        <div class="geo-shape geo-bars"></div>
+        <div class="geo-shape geo-scatter"></div>
     </div>
 
     <main class="container">
         <header class="header">
             <div class="brand">
                 <div class="brand-mark">
-                    <span class="mark-square"></span>
-                    <span class="mark-circle"></span>
+                    <span class="mark-bar mark-bar-1"></span>
+                    <span class="mark-bar mark-bar-2"></span>
+                    <span class="mark-bar mark-bar-3"></span>
+                    <span class="mark-dot"></span>
                 </div>
                 <div>
-                    <p class="brand-label">Sistema de dados</p>
-                    <h1>Enriquecimento NIO</h1>
+                    <p class="brand-label">Pipeline de dados</p>
+                    <h1>Enriquecimento <span class="accent-nio">NIO</span></h1>
                 </div>
             </div>
-            <p class="header-desc">Importe uma planilha e visualize os endereços identificados automaticamente.</p>
+            <p class="header-desc">Importe uma planilha e extraia endereços com processamento automatizado em Python.</p>
+            <div class="header-tags">
+                <span class="tag tag-cyan">pandas</span>
+                <span class="tag tag-violet">xlsx / csv</span>
+                <span class="tag tag-emerald">geolocalização</span>
+            </div>
         </header>
 
         <section class="upload-card">
@@ -51,7 +59,7 @@
             </label>
 
             <button type="button" id="btn-processar" disabled>
-                <span>Processar planilha</span>
+                <span>Executar pipeline</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -62,25 +70,25 @@
 
         <section id="resultado" class="resultado hidden">
             <div class="section-head">
-                <h2>Resultado</h2>
+                <h2>Output</h2>
                 <div class="section-line"></div>
             </div>
 
             <div class="stats">
-                <article class="stat-card">
-                    <div class="stat-icon stat-icon-file"></div>
+                <article class="stat-card stat-cyan">
+                    <div class="stat-accent"></div>
                     <span class="stat-label">Arquivo</span>
                     <strong id="stat-arquivo">-</strong>
                 </article>
-                <article class="stat-card">
-                    <div class="stat-icon stat-icon-rows"></div>
+                <article class="stat-card stat-violet">
+                    <div class="stat-accent"></div>
                     <span class="stat-label">Linhas na planilha</span>
-                    <strong id="stat-linhas">0</strong>
+                    <strong id="stat-linhas" class="mono">0</strong>
                 </article>
-                <article class="stat-card highlight">
-                    <div class="stat-icon stat-icon-pin"></div>
+                <article class="stat-card stat-emerald highlight">
+                    <div class="stat-accent"></div>
                     <span class="stat-label">Endereços encontrados</span>
-                    <strong id="stat-enderecos">0</strong>
+                    <strong id="stat-enderecos" class="mono">0</strong>
                 </article>
             </div>
 
@@ -90,9 +98,9 @@
                         <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/>
                         <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
-                    <input type="search" id="busca" placeholder="Buscar endereço...">
+                    <input type="search" id="busca" placeholder="Filtrar endereços...">
                 </div>
-                <span id="contador-lista"></span>
+                <span id="contador-lista" class="mono"></span>
             </div>
 
             <div class="table-wrapper">
@@ -110,7 +118,7 @@
 
             <div class="pagination">
                 <button type="button" id="btn-anterior" disabled>Anterior</button>
-                <span id="pagina-atual">Página 1</span>
+                <span id="pagina-atual" class="mono">Página 1</span>
                 <button type="button" id="btn-proximo" disabled>Próxima</button>
             </div>
         </section>
