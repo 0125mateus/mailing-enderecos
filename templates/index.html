@@ -55,23 +55,6 @@
                 </button>
             </div>
             <p class="header-desc">Importe uma planilha de mailing e visualize os endereços de forma rápida e organizada.</p>
-            <div class="maps-actions maps-actions-header">
-                <a
-                    href="{{ google_maps_url }}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="btn-maps-open"
-                >
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                        <path d="M8 1.5l5.5 3.2v7.1L8 15.5 2.5 11.8V4.7L8 1.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                        <circle cx="8" cy="7" r="2" stroke="currentColor" stroke-width="1.5"/>
-                    </svg>
-                    <span>Abrir Google My Maps</span>
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                        <path d="M5 2h7v7M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </a>
-            </div>
         </header>
 
         <section class="upload-card">
@@ -176,7 +159,24 @@
             <div class="pagination">
                 <button type="button" id="btn-anterior" disabled>Anterior</button>
                 <span id="pagina-atual" class="mono">Página 1</span>
-                <button type="button" id="btn-proximo" disabled>Próxima</button>
+                <div class="pagination-actions">
+                    <button type="button" id="btn-proximo" disabled>Próxima</button>
+                    <a
+                        href="{{ google_maps_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn-maps-open"
+                    >
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <path d="M8 1.5l5.5 3.2v7.1L8 15.5 2.5 11.8V4.7L8 1.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            <circle cx="8" cy="7" r="2" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                        <span>Abrir Google My Maps</span>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                            <path d="M5 2h7v7M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
         </section>
     </main>
