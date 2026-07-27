@@ -1,15 +1,26 @@
 import os
+from contextlib import contextmanager
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
 from django.conf import settings
-from playwright.sync_api import BrowserContext, Playwright
+from playwright.sync_api import Browser, BrowserContext, Playwright
 
 STEALTH_ARGS = (
     "--disable-blink-features=AutomationControlled",
 )
 
+LINUX_ARGS = (
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-dev-shm-usage",
+)
+
 STEALTH_IGNORE_DEFAULT_ARGS = ("--enable-automation",)
+
+
+def is_render_runtime() -> bool:
+    return bool(os.environ.get("RENDER") or os.environ.get("RENDER_EXTERNAL_HOSTNAME"))
 
 
 def get_user_data_dir() -> Path:
@@ -23,7 +34,7 @@ def get_user_data_dir() -> Path:
 
 def get_browser_channel() -> str:
     return getattr(settings, "PLAYWRIGHT_BROWSER_CHANNEL", "") or os.environ.get(
-        "PLAYWRIGHT_BROWSER_CHANNEL", "chrome"
+        "PLAYWRIGHT_BROWSER_CHANNEL", ""
     )
 
 
@@ -36,24 +47,80 @@ def get_storage_state_path() -> Path | None:
     return None
 
 
+def _browser_args(*, headless: bool) -> list[str]:
+    args = list(STEALTH_ARGS)
+    if is_render_runtime() or headless:
+        args.extend(LINUX_ARGS)
+    return args
+
+
+def _should_use_persistent_profile(channel: str) -> bool:
+    return bool(channel) and not is_render_runtime()
+
+
+def _launch_kwargs(*, headless: bool) -> dict[str, Any]:
+    kwargs: dict[str, Any] = {
+        "headless": headless,
+        "args": _browser_args(headless=headless),
+        "ignore_default_args": list(STEALTH_IGNORE_DEFAULT_ARGS),
+    }
+    channel = get_browser_channel()
+    if channel:
+        kwargs["channel"] = channel
+    return kwargs
+
+
 def _persistent_launch_kwargs(*, headless: bool) -> dict[str, Any]:
     profile_dir = get_user_data_dir()
     profile_dir.mkdir(parents=True, exist_ok=True)
 
-    kwargs: dict[str, Any] = {
-        "user_data_dir": str(profile_dir),
-        "headless": headless,
-        "args": list(STEALTH_ARGS),
-        "ignore_default_args": list(STEALTH_IGNORE_DEFAULT_ARGS),
-        "locale": "pt-BR",
-        "viewport": {"width": 1366, "height": 768},
-    }
-
-    channel = get_browser_channel()
-    if channel:
-        kwargs["channel"] = channel
-
+    kwargs = _launch_kwargs(headless=headless)
+    kwargs["user_data_dir"] = str(profile_dir)
+    kwargs["locale"] = "pt-BR"
+    kwargs["viewport"] = {"width": 1366, "height": 768}
     return kwargs
+
+
+@contextmanager
+def maps_browser_session(
+    playwright: Playwright,
+    *,
+    headless: bool,
+) -> Iterator[BrowserContext]:
+    browser: Browser | None = None
+    context: BrowserContext | None = None
+    channel = get_browser_channel()
+
+    try:
+        if _should_use_persistent_profile(channel):
+            try:
+                context = playwright.chromium.launch_persistent_context(
+                    **_persistent_launch_kwargs(headless=headless)
+                )
+                yield context
+                return
+            except Exception as exc:
+                raise RuntimeError(
+                    f"Não foi possível abrir o Google Chrome (channel={channel}). "
+                    "Instale o Google Chrome ou defina PLAYWRIGHT_BROWSER_CHANNEL=msedge."
+                ) from exc
+
+        browser = playwright.chromium.launch(**_launch_kwargs(headless=headless))
+        context_kwargs: dict[str, Any] = {
+            "locale": "pt-BR",
+            "viewport": {"width": 1366, "height": 768},
+        }
+        storage_state = get_storage_state_path()
+        if storage_state:
+            context_kwargs["storage_state"] = str(storage_state)
+
+        context = browser.new_context(**context_kwargs)
+        yield context
+    finally:
+        if context:
+            context.close()
+        if browser:
+            browser.close()
 
 
 def open_maps_context(
@@ -62,30 +129,13 @@ def open_maps_context(
     headless: bool,
     prefer_persistent: bool = True,
 ) -> BrowserContext:
-    if prefer_persistent:
-        try:
-            return playwright.chromium.launch_persistent_context(
-                **_persistent_launch_kwargs(headless=headless)
-            )
-        except Exception as exc:
-            channel = get_browser_channel()
-            if channel:
-                raise RuntimeError(
-                    f"Não foi possível abrir o Google Chrome (channel={channel}). "
-                    "Instale o Google Chrome ou defina PLAYWRIGHT_BROWSER_CHANNEL=msedge."
-                ) from exc
-            raise
-
-    launch_kwargs: dict[str, Any] = {
-        "headless": headless,
-        "args": list(STEALTH_ARGS),
-        "ignore_default_args": list(STEALTH_IGNORE_DEFAULT_ARGS),
-    }
     channel = get_browser_channel()
-    if channel:
-        launch_kwargs["channel"] = channel
+    if prefer_persistent and _should_use_persistent_profile(channel):
+        return playwright.chromium.launch_persistent_context(
+            **_persistent_launch_kwargs(headless=headless)
+        )
 
-    browser = playwright.chromium.launch(**launch_kwargs)
+    browser = playwright.chromium.launch(**_launch_kwargs(headless=headless))
     context_kwargs: dict[str, Any] = {
         "locale": "pt-BR",
         "viewport": {"width": 1366, "height": 768},

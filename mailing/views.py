@@ -78,9 +78,7 @@ def iniciar_maps_automation(request):
 
     if not settings.PLAYWRIGHT_ENABLED:
         return JsonResponse(
-            {
-                "erro": "Automação do Google My Maps disponível apenas no ambiente local.",
-            },
+            {"erro": "Automação do Google My Maps está desabilitada."},
             status=503,
         )
 

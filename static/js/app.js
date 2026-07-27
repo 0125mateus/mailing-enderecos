@@ -172,18 +172,7 @@ async function pollMapsJobStatus() {
 }
 
 async function handleAbrirMaps() {
-    if (mapsAutomationEnabled) {
-        await iniciarMapsAutomation();
-        return;
-    }
-
-    if (googleMapsUrl) {
-        window.open(googleMapsUrl, "_blank", "noopener,noreferrer");
-    }
-    showStatus(
-        "Automação com Playwright funciona no ambiente local. No Render, o mapa abre em nova aba.",
-        "info"
-    );
+    await iniciarMapsAutomation();
 }
 
 async function iniciarMapsAutomation() {

@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: bash build.sh
-    startCommand: gunicorn config.wsgi:application
+    startCommand: bash start.sh
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
@@ -19,7 +19,11 @@ services:
       - key: PLAYWRIGHT_HEADLESS
         value: "True"
       - key: PLAYWRIGHT_ENABLED
-        value: "False"
+        value: "True"
+      - key: PLAYWRIGHT_REQUIRE_AUTH
+        value: "True"
+      - key: PLAYWRIGHT_STORAGE_STATE
+        value: playwright/google-auth.json
       - key: GOOGLE_MAPS_URL
         value: "https://www.google.com/maps/d/viewer?mid=1NfQvsWBh_AmyvVABRRd7_lJ4W4mg8q4&ll=-23.281103667749008%2C-51.28276285&z=17"
 

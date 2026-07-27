@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "mailing",
+    "mailing.apps.MailingConfig",
 ]
 
 MIDDLEWARE = [
@@ -140,12 +140,13 @@ PLAYWRIGHT_USER_DATA_DIR = os.environ.get(
     "PLAYWRIGHT_USER_DATA_DIR",
     str(BASE_DIR / "playwright" / "chrome-profile"),
 )
-PLAYWRIGHT_ENABLED = os.environ.get(
-    "PLAYWRIGHT_ENABLED",
-    "False" if render_host else "True",
+PLAYWRIGHT_ENABLED = os.environ.get("PLAYWRIGHT_ENABLED", "True").lower() == "true"
+PLAYWRIGHT_REQUIRE_AUTH = os.environ.get(
+    "PLAYWRIGHT_REQUIRE_AUTH",
+    "True" if render_host else "False",
 ).lower() == "true"
 _default_storage_state = BASE_DIR / "playwright" / "google-auth.json"
 PLAYWRIGHT_STORAGE_STATE = os.environ.get(
     "PLAYWRIGHT_STORAGE_STATE",
-    str(_default_storage_state) if _default_storage_state.is_file() else "",
+    str(_default_storage_state),
 )
