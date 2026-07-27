@@ -13,11 +13,38 @@ const paginaAtual = document.getElementById("pagina-atual");
 const statArquivo = document.getElementById("stat-arquivo");
 const statLinhas = document.getElementById("stat-linhas");
 const statEnderecos = document.getElementById("stat-enderecos");
+const btnTema = document.getElementById("btn-tema");
 
 const PAGE_SIZE = 50;
+const THEME_KEY = "theme";
 
 let enderecosFiltrados = [];
 let pagina = 1;
+
+function getTheme() {
+    return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+}
+
+function setTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem(THEME_KEY, theme);
+    if (btnTema) {
+        btnTema.setAttribute(
+            "aria-label",
+            theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
+        );
+    }
+}
+
+if (btnTema) {
+    btnTema.setAttribute(
+        "aria-label",
+        getTheme() === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
+    );
+    btnTema.addEventListener("click", () => {
+        setTheme(getTheme() === "dark" ? "light" : "dark");
+    });
+}
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;

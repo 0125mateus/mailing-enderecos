@@ -1,4 +1,5 @@
-:root {
+:root,
+[data-theme="light"] {
     --bg-deep: #eef2f7;
     --bg: #f8fafc;
     --surface: #ffffff;
@@ -22,17 +23,63 @@
     --emerald-dim: rgba(5, 150, 105, 0.08);
     --emerald-glow: rgba(5, 150, 105, 0.12);
 
-    --coral: #e11d48;
-    --amber: #d97706;
-    --indigo: #4f46e5;
-
     --error: #b91c1c;
     --error-bg: #fef2f2;
     --error-border: #fecaca;
 
+    --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.06);
+    --geo-gradient-top: rgba(8, 145, 178, 0.07);
+    --geo-gradient-side: rgba(124, 58, 237, 0.05);
+    --geo-gradient-base: #ffffff;
+    --geo-grid-line: rgba(203, 213, 225, 0.5);
+    --geo-ring-border: rgba(8, 145, 178, 0.25);
+    --geo-ruled-border: rgba(203, 213, 225, 0.6);
+    --geo-ruled-line: rgba(203, 213, 225, 0.5);
+    --geo-ruled-margin: rgba(225, 29, 72, 0.2);
+}
+
+[data-theme="dark"] {
+    --bg-deep: #070b14;
+    --bg: #0c1222;
+    --surface: #131c2e;
+    --surface-hover: #182338;
+    --surface-elevated: #1a2740;
+    --text: #e8edf5;
+    --text-secondary: #94a3b8;
+    --muted: #5c6b82;
+    --border: #243044;
+    --border-light: #2e3f58;
+
+    --cyan: #22d3ee;
+    --cyan-dim: rgba(34, 211, 238, 0.12);
+    --cyan-glow: rgba(34, 211, 238, 0.2);
+
+    --violet: #a78bfa;
+    --violet-dim: rgba(167, 139, 250, 0.12);
+    --violet-glow: rgba(167, 139, 250, 0.18);
+
+    --emerald: #34d399;
+    --emerald-dim: rgba(52, 211, 153, 0.12);
+    --emerald-glow: rgba(52, 211, 153, 0.15);
+
+    --error: #fca5a5;
+    --error-bg: rgba(248, 113, 113, 0.1);
+    --error-border: rgba(248, 113, 113, 0.3);
+
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+    --geo-gradient-top: rgba(34, 211, 238, 0.08);
+    --geo-gradient-side: rgba(167, 139, 250, 0.06);
+    --geo-gradient-base: transparent;
+    --geo-grid-line: rgba(46, 63, 88, 0.45);
+    --geo-ring-border: rgba(34, 211, 238, 0.2);
+    --geo-ruled-border: rgba(46, 63, 88, 0.6);
+    --geo-ruled-line: rgba(46, 63, 88, 0.5);
+    --geo-ruled-margin: rgba(251, 113, 133, 0.25);
+}
+
+:root {
     --radius: 14px;
     --radius-sm: 10px;
-    --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.06);
     --font-mono: "JetBrains Mono", "Fira Code", monospace;
 }
 
@@ -48,6 +95,7 @@ body {
     color: var(--text);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    transition: background 0.25s ease, color 0.25s ease;
 }
 
 .mono {
@@ -64,17 +112,17 @@ body {
     pointer-events: none;
     z-index: 0;
     background:
-        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(8, 145, 178, 0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 100% 50%, rgba(124, 58, 237, 0.05) 0%, transparent 50%),
-        linear-gradient(180deg, #ffffff 0%, var(--bg-deep) 100%);
+        radial-gradient(ellipse 80% 60% at 50% -10%, var(--geo-gradient-top) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 100% 50%, var(--geo-gradient-side) 0%, transparent 50%),
+        linear-gradient(180deg, var(--geo-gradient-base) 0%, var(--bg-deep) 100%);
 }
 
 .geo-grid {
     position: absolute;
     inset: 0;
     background-image:
-        linear-gradient(rgba(203, 213, 225, 0.5) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(203, 213, 225, 0.5) 1px, transparent 1px);
+        linear-gradient(var(--geo-grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--geo-grid-line) 1px, transparent 1px);
     background-size: 48px 48px;
     mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 80%);
 }
@@ -110,7 +158,7 @@ body {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    border: 1px solid rgba(8, 145, 178, 0.25);
+    border: 1px solid var(--geo-ring-border);
 }
 
 .geo-ruled {
@@ -118,15 +166,15 @@ body {
     right: 10%;
     width: 120px;
     height: 72px;
-    border: 1px solid rgba(203, 213, 225, 0.6);
+    border: 1px solid var(--geo-ruled-border);
     border-radius: 4px;
     background:
         repeating-linear-gradient(
             180deg,
             transparent,
             transparent 14px,
-            rgba(203, 213, 225, 0.5) 14px,
-            rgba(203, 213, 225, 0.5) 15px
+            var(--geo-ruled-line) 14px,
+            var(--geo-ruled-line) 15px
         );
     opacity: 0.5;
 }
@@ -138,7 +186,7 @@ body {
     bottom: 0;
     left: 18px;
     width: 1px;
-    background: rgba(225, 29, 72, 0.2);
+    background: var(--geo-ruled-margin);
 }
 
 /* ── Layout ── */
@@ -157,11 +205,50 @@ body {
     margin-bottom: 36px;
 }
 
+.header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.theme-toggle:hover {
+    border-color: var(--border-light);
+    color: var(--cyan);
+    background: var(--surface-hover);
+}
+
+[data-theme="light"] .icon-sun,
+[data-theme="dark"] .icon-moon {
+    display: none;
+}
+
+[data-theme="light"] .icon-moon,
+[data-theme="dark"] .icon-sun {
+    display: block;
+}
+
 .brand {
     display: flex;
     align-items: center;
     gap: 18px;
-    margin-bottom: 14px;
 }
 
 .brand-mark {
@@ -246,6 +333,7 @@ body {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
+    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .upload-card {
