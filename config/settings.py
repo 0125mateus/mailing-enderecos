@@ -146,6 +146,11 @@ GOOGLE_MAPS_URL = os.environ.get(
     "GOOGLE_MAPS_URL",
     "https://www.google.com/maps/d/viewer?mid=1NfQvsWBh_AmyvVABRRd7_lJ4W4mg8q4&ll=-23.281103667749008%2C-51.28276285&z=17",
 )
+GOOGLE_MAPS_LEGEND_XPATH = os.environ.get(
+    "GOOGLE_MAPS_LEGEND_XPATH",
+    '//*[@id="legendPanel"]/div/div/div[1]/div[4]/div/span/span/span',
+)
+PLAYWRIGHT_LEGEND_TIMEOUT_MS = int(os.environ.get("PLAYWRIGHT_LEGEND_TIMEOUT_MS", "60000"))
 PLAYWRIGHT_HEADLESS = os.environ.get("PLAYWRIGHT_HEADLESS", "True").lower() == "true"
 PLAYWRIGHT_SEARCH_DELAY_MS = int(os.environ.get("PLAYWRIGHT_SEARCH_DELAY_MS", "2500"))
 _default_browser_channel = "" if render_host else "chrome"

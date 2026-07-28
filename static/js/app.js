@@ -147,10 +147,14 @@ document.addEventListener("DOMContentLoaded", () => {
             mapsProgressAddress.textContent = job.current_address;
         }
 
-        if (job.status === "pending") {
+        if job.status === "pending") {
             mapsProgressLabel.textContent = "Iniciando Playwright e abrindo o mapa...";
         } else if (job.status === "running") {
-            mapsProgressLabel.textContent = "Pesquisando endereços no Google My Maps...";
+            if (job.current === 0) {
+                mapsProgressLabel.textContent = "Aguardando legenda do mapa...";
+            } else {
+                mapsProgressLabel.textContent = "Pesquisando endereços no Google My Maps...";
+            }
         } else if (job.status === "completed") {
             mapsProgressLabel.textContent = job.message || "Pesquisa concluída.";
         } else if (job.status === "cancelled") {

@@ -8,6 +8,17 @@ from playwright.sync_api import sync_playwright
 from .playwright_browser import get_or_create_page, get_storage_state_path, maps_browser_session
 
 SEARCH_INPUT_XPATH = '//*[@id="searchPanel"]/div/div/div[1]/div[2]/div[1]/div/div[1]/input'
+LEGEND_CLICK_XPATH = '//*[@id="legendPanel"]/div/div/div[1]/div[4]/div/span/span/span'
+
+
+def _click_legend_panel(page) -> None:
+    legend_xpath = getattr(settings, "GOOGLE_MAPS_LEGEND_XPATH", LEGEND_CLICK_XPATH)
+    timeout_ms = getattr(settings, "PLAYWRIGHT_LEGEND_TIMEOUT_MS", 60000)
+
+    legend_item = page.locator(f"xpath={legend_xpath}")
+    legend_item.wait_for(state="visible", timeout=timeout_ms)
+    legend_item.click(timeout=15000)
+    page.wait_for_timeout(500)
 
 
 def search_addresses_on_map(
@@ -49,6 +60,14 @@ def search_addresses_on_map(
                     raise ValueError(
                         "Não foi possível abrir o Google My Maps ou localizar o campo de busca. "
                         "Verifique a sessão Google (google-auth.json) e se o mapa está acessível."
+                    ) from exc
+
+                try:
+                    _click_legend_panel(page)
+                except PlaywrightTimeoutError as exc:
+                    raise ValueError(
+                        "Não foi possível clicar no item da legenda do mapa. "
+                        "Verifique se o painel legendPanel carregou corretamente."
                     ) from exc
 
                 search_input = page.locator(f"xpath={SEARCH_INPUT_XPATH}")
