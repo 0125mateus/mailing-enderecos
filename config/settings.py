@@ -70,11 +70,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+_database_url = os.environ.get("DATABASE_URL", "")
+_ssl_env = os.environ.get("DATABASE_SSL_REQUIRE", "").lower()
+if _ssl_env in ("true", "1", "yes"):
+    _database_ssl_require = True
+elif _ssl_env in ("false", "0", "no"):
+    _database_ssl_require = False
+else:
+    _database_ssl_require = bool(os.environ.get("RENDER")) or "sslmode=require" in _database_url
+
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
         conn_max_age=600,
-        ssl_require=not DEBUG,
+        ssl_require=_database_ssl_require,
     )
 }
 

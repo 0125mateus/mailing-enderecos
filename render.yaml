@@ -16,6 +16,8 @@ services:
         fromDatabase:
           name: mailing-enderecos-db
           property: connectionString
+      - key: DATABASE_SSL_REQUIRE
+        value: "true"
       - key: PLAYWRIGHT_ENABLED
         value: "False"
       - key: GOOGLE_MAPS_URL
