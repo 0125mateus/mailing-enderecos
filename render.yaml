@@ -2,7 +2,7 @@ services:
   - type: web
     name: enriquecimento-nio
     env: python
-    plan: free
+    plan: pro
     buildCommand: bash build.sh
     startCommand: gunicorn config.wsgi:application --workers 1 --threads 4 --timeout 120
     envVars:
@@ -19,9 +19,15 @@ services:
       - key: DATABASE_SSL_REQUIRE
         value: "true"
       - key: PLAYWRIGHT_ENABLED
-        value: "False"
+        value: "True"
+      - key: PLAYWRIGHT_HEADLESS
+        value: "True"
+      - key: PLAYWRIGHT_REQUIRE_AUTH
+        value: "True"
       - key: GOOGLE_MAPS_URL
         value: "https://www.google.com/maps/d/viewer?mid=1NfQvsWBh_AmyvVABRRd7_lJ4W4mg8q4&ll=-23.281103667749008%2C-51.28276285&z=17"
+      # Defina no painel do Render (Secret): PLAYWRIGHT_STORAGE_STATE_JSON
+      # Conteúdo de playwright/google-auth.json gerado no PC (manage.py salvar_sessao_google)
 
 databases:
   - name: mailing-enderecos-db

@@ -3,8 +3,8 @@ set -o errexit
 
 pip install -r requirements.txt
 
-# Playwright só no ambiente local — no Render free fica desabilitado.
-if [ -z "${RENDER:-}" ]; then
+# Playwright: sempre no PC local; no Render quando PLAYWRIGHT_ENABLED=True (plano Pro).
+if [ -z "${RENDER:-}" ] || [ "${PLAYWRIGHT_ENABLED:-False}" = "True" ]; then
   pip install -r requirements-local.txt
   python -m playwright install --with-deps chromium
 fi
