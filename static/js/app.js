@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
             mapsProgressAddress.textContent = job.current_address;
         }
 
-        if job.status === "pending") {
+        if (job.status === "pending") {
             mapsProgressLabel.textContent = "Iniciando Playwright e abrindo o mapa...";
         } else if (job.status === "running") {
             if (job.current === 0) {
