@@ -16,8 +16,18 @@ urlpatterns = [
         name="status_maps_automation",
     ),
     path(
+        "api/maps/automation/<str:job_id>/exportar/",
+        views.exportar_maps_resultado,
+        name="exportar_maps_resultado",
+    ),
+    path(
         "api/maps/automation/<str:job_id>/cancelar/",
         views.cancelar_maps_automation,
         name="cancelar_maps_automation",
+    ),
+    path(
+        "api/maps/automation/<str:job_id>/continuar/",
+        views.continuar_maps_automation,
+        name="continuar_maps_automation",
     ),
 ]

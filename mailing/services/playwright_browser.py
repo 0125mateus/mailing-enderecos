@@ -49,9 +49,17 @@ def get_storage_state_path() -> Path | None:
 
 def _browser_args(*, headless: bool) -> list[str]:
     args = list(STEALTH_ARGS)
+    if not headless:
+        args.append("--start-maximized")
     if is_render_runtime() or headless:
         args.extend(LINUX_ARGS)
     return args
+
+
+def _context_display_kwargs(*, headless: bool) -> dict[str, Any]:
+    if headless:
+        return {"viewport": {"width": 1366, "height": 768}}
+    return {"no_viewport": True}
 
 
 def _should_use_persistent_profile(channel: str) -> bool:
@@ -77,7 +85,7 @@ def _persistent_launch_kwargs(*, headless: bool) -> dict[str, Any]:
     kwargs = _launch_kwargs(headless=headless)
     kwargs["user_data_dir"] = str(profile_dir)
     kwargs["locale"] = "pt-BR"
-    kwargs["viewport"] = {"width": 1366, "height": 768}
+    kwargs.update(_context_display_kwargs(headless=headless))
     return kwargs
 
 
@@ -89,38 +97,42 @@ def maps_browser_session(
 ) -> Iterator[BrowserContext]:
     browser: Browser | None = None
     context: BrowserContext | None = None
+    storage_state = get_storage_state_path()
     channel = get_browser_channel()
+    use_persistent = (
+        _should_use_persistent_profile(channel)
+        and not storage_state
+        and getattr(settings, "PLAYWRIGHT_WAIT_FOR_MANUAL_LOGIN", False)
+        and not headless
+    )
 
-    try:
-        if _should_use_persistent_profile(channel):
-            try:
-                context = playwright.chromium.launch_persistent_context(
-                    **_persistent_launch_kwargs(headless=headless)
-                )
-                yield context
-                return
-            except Exception as exc:
-                raise RuntimeError(
-                    f"Não foi possível abrir o Google Chrome (channel={channel}). "
-                    "Instale o Google Chrome ou defina PLAYWRIGHT_BROWSER_CHANNEL=msedge."
-                ) from exc
-
+    if use_persistent:
+        context = playwright.chromium.launch_persistent_context(
+            **_persistent_launch_kwargs(headless=headless)
+        )
+    else:
         browser = playwright.chromium.launch(**_launch_kwargs(headless=headless))
         context_kwargs: dict[str, Any] = {
             "locale": "pt-BR",
-            "viewport": {"width": 1366, "height": 768},
+            **_context_display_kwargs(headless=headless),
         }
-        storage_state = get_storage_state_path()
         if storage_state:
             context_kwargs["storage_state"] = str(storage_state)
-
         context = browser.new_context(**context_kwargs)
+
+    try:
         yield context
     finally:
-        if context:
-            context.close()
+        try:
+            if context:
+                context.close()
+        except Exception:
+            pass
         if browser:
-            browser.close()
+            try:
+                browser.close()
+            except Exception:
+                pass
 
 
 def open_maps_context(
@@ -138,7 +150,7 @@ def open_maps_context(
     browser = playwright.chromium.launch(**_launch_kwargs(headless=headless))
     context_kwargs: dict[str, Any] = {
         "locale": "pt-BR",
-        "viewport": {"width": 1366, "height": 768},
+        **_context_display_kwargs(headless=headless),
     }
     storage_state = get_storage_state_path()
     if storage_state:

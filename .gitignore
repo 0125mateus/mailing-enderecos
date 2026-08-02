@@ -6,6 +6,7 @@ staticfiles/
 .env
 playwright/*
 !playwright/.gitkeep
+playwright/jobs/
 *.xlsx
 *.xls
 *.csv

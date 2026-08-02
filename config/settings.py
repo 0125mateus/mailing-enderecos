@@ -153,15 +153,48 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 
 GOOGLE_MAPS_URL = os.environ.get(
     "GOOGLE_MAPS_URL",
-    "https://www.google.com/maps/d/viewer?mid=1NfQvsWBh_AmyvVABRRd7_lJ4W4mg8q4&ll=-23.281103667749008%2C-51.28276285&z=17",
+    "https://www.google.com/maps/d/u/0/viewer?mid=1NfQvsWBh_AmyvVABRRd7_lJ4W4mg8q4&ll=-23.281103667749008%2C-51.28276285&z=17",
 )
 GOOGLE_MAPS_LEGEND_XPATH = os.environ.get(
     "GOOGLE_MAPS_LEGEND_XPATH",
-    '//*[@id="legendPanel"]/div/div/div[1]/div[4]/div/span/span/span',
+    "",
 )
+GOOGLE_MAPS_SEARCH_BUTTON_XPATH = os.environ.get(
+    "GOOGLE_MAPS_SEARCH_BUTTON_XPATH",
+    '//*[@id="legendPanel"]/div/div/div[1]/div[4]/div',
+)
+GOOGLE_MAPS_SEARCH_INPUT_XPATH = os.environ.get(
+    "GOOGLE_MAPS_SEARCH_INPUT_XPATH",
+    '//*[@id="searchPanel"]/div/div/div[1]/div[2]/div[1]/div/div[1]/input',
+)
+GOOGLE_MAPS_KML_PATH = os.environ.get("GOOGLE_MAPS_KML_PATH", "")
+GOOGLE_MAPS_NIO_LAYER_PREFIX = os.environ.get("GOOGLE_MAPS_NIO_LAYER_PREFIX", "NIO")
+GOOGLE_MAPS_NIO_PROXIMITY_KM = float(os.environ.get("GOOGLE_MAPS_NIO_PROXIMITY_KM", "15"))
 PLAYWRIGHT_LEGEND_TIMEOUT_MS = int(os.environ.get("PLAYWRIGHT_LEGEND_TIMEOUT_MS", "60000"))
+PLAYWRIGHT_SEARCH_BUTTON_TIMEOUT_MS = int(
+    os.environ.get("PLAYWRIGHT_SEARCH_BUTTON_TIMEOUT_MS", "60000")
+)
+PLAYWRIGHT_KML_TIMEOUT_MS = int(os.environ.get("PLAYWRIGHT_KML_TIMEOUT_MS", "15000"))
+PLAYWRIGHT_COORDINATES_TIMEOUT_MS = int(
+    os.environ.get("PLAYWRIGHT_COORDINATES_TIMEOUT_MS", "2500")
+)
 PLAYWRIGHT_HEADLESS = os.environ.get("PLAYWRIGHT_HEADLESS", "True").lower() == "true"
+if DEBUG and os.environ.get("PLAYWRIGHT_HEADLESS", "").strip() == "":
+    PLAYWRIGHT_HEADLESS = False
 PLAYWRIGHT_SEARCH_DELAY_MS = int(os.environ.get("PLAYWRIGHT_SEARCH_DELAY_MS", "2500"))
+PLAYWRIGHT_LOGIN_TIMEOUT_MS = int(os.environ.get("PLAYWRIGHT_LOGIN_TIMEOUT_MS", "300000"))
+PLAYWRIGHT_WAIT_FOR_MANUAL_LOGIN = os.environ.get(
+    "PLAYWRIGHT_WAIT_FOR_MANUAL_LOGIN",
+    "False" if render_host else "True",
+).lower() == "true"
+PLAYWRIGHT_WAIT_BEFORE_ADDRESS_LOOP = os.environ.get(
+    "PLAYWRIGHT_WAIT_BEFORE_ADDRESS_LOOP",
+    "False" if render_host else "True",
+).lower() == "true"
+PLAYWRIGHT_SAVE_SESSION_AFTER_LOGIN = os.environ.get(
+    "PLAYWRIGHT_SAVE_SESSION_AFTER_LOGIN",
+    "False" if render_host else "True",
+).lower() == "true"
 _default_browser_channel = "" if render_host else "chrome"
 PLAYWRIGHT_BROWSER_CHANNEL = os.environ.get(
     "PLAYWRIGHT_BROWSER_CHANNEL", _default_browser_channel

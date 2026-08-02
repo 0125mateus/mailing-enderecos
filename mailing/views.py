@@ -1,11 +1,11 @@
 import json
 
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
 
-from .services.spreadsheet import extract_addresses
+from .services.spreadsheet import export_results_spreadsheet, extract_addresses
 
 MAX_FILE_SIZE = 20 * 1024 * 1024
 ALLOWED_EXTENSIONS = (".xlsx", ".xls", ".csv")
@@ -15,12 +15,22 @@ ALLOWED_EXTENSIONS = (".xlsx", ".xls", ".csv")
 def home(request):
     from django.conf import settings
 
+    auth_ready = not settings.PLAYWRIGHT_REQUIRE_AUTH
+    if settings.PLAYWRIGHT_ENABLED:
+        try:
+            from .services.playwright_browser import get_storage_state_path
+
+            auth_ready = bool(get_storage_state_path()) or not settings.PLAYWRIGHT_REQUIRE_AUTH
+        except ModuleNotFoundError:
+            auth_ready = False
+
     return render(
         request,
         "index.html",
         {
             "maps_automation_enabled": settings.PLAYWRIGHT_ENABLED,
             "google_maps_url": settings.GOOGLE_MAPS_URL,
+            "playwright_auth_ready": auth_ready,
         },
     )
 
@@ -101,13 +111,29 @@ def iniciar_maps_automation(request):
         )
 
     enderecos = []
+    resultados_anteriores = payload.get("resultados_anteriores", [])
+    if not isinstance(resultados_anteriores, list):
+        return JsonResponse(
+            {"erro": "O campo 'resultados_anteriores' deve ser uma lista."},
+            status=400,
+        )
+
     for item in enderecos_raw:
         if isinstance(item, dict):
             text = str(item.get("endereco", "")).strip()
+            if not text:
+                continue
+            linha = item.get("linha")
+            enderecos.append(
+                {
+                    "linha": linha,
+                    "endereco": text,
+                }
+            )
         else:
             text = str(item).strip()
-        if text:
-            enderecos.append(text)
+            if text:
+                enderecos.append({"linha": len(enderecos) + 1, "endereco": text})
 
     if not enderecos:
         return JsonResponse(
@@ -115,7 +141,11 @@ def iniciar_maps_automation(request):
             status=400,
         )
 
-    job = create_job(enderecos)
+    try:
+        job = create_job(enderecos, resultados_anteriores=resultados_anteriores)
+    except ValueError as exc:
+        return JsonResponse({"erro": str(exc)}, status=409)
+
     return JsonResponse(job.to_dict(), status=202)
 
 
@@ -129,11 +159,51 @@ def status_maps_automation(request, job_id):
     return JsonResponse(job.to_dict())
 
 
+@require_http_methods(["GET"])
+def exportar_maps_resultado(request, job_id):
+    from .services.automation_jobs import get_job
+
+    job = get_job(job_id)
+    if not job or not job.result:
+        return JsonResponse({"erro": "Resultado da automação não encontrado."}, status=404)
+
+    resultados = job.result.get("resultados") or []
+    if not resultados:
+        return JsonResponse({"erro": "Nenhum resultado disponível para exportação."}, status=404)
+
+    try:
+        parcial = job.status in {"cancelled", "failed"}
+        file_bytes = export_results_spreadsheet(resultados, parcial=parcial)
+    except Exception:
+        return JsonResponse(
+            {"erro": "Não foi possível gerar a planilha de resultados."},
+            status=500,
+        )
+
+    filename = f"resultado-nio-{job_id[:8]}.xlsx"
+    response = HttpResponse(
+        file_bytes,
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+    return response
+
+
 @require_http_methods(["POST"])
 def cancelar_maps_automation(request, job_id):
     from .services.automation_jobs import cancel_job
 
     job = cancel_job(job_id)
+    if not job:
+        return JsonResponse({"erro": "Automação não encontrada."}, status=404)
+    return JsonResponse(job.to_dict())
+
+
+@require_http_methods(["POST"])
+def continuar_maps_automation(request, job_id):
+    from .services.automation_jobs import resume_job
+
+    job = resume_job(job_id)
     if not job:
         return JsonResponse({"erro": "Automação não encontrada."}, status=404)
     return JsonResponse(job.to_dict())
